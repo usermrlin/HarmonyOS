@@ -1,13 +1,52 @@
+import UserDialog from '../view/welcome/CustomDialog'
+import common from '@ohos.app.ability.common'
+import preferenceUtil from '../common/utils/PreferenceUtil'
+import router from '@ohos.router'
 @Extend(Text) function TextStyle(opacity: number,fontSize: number=10){
   .fontSize(fontSize)
   .opacity(opacity)
   .fontColor(Color.White)
 }
+const PREF_KEY = 'userPrivacykey'
 @Entry
 @Component
 struct WlecomePage {
-  @State message: string = 'Hello World'
+  context = getContext(this) as common.UIAbilityContext
+  controller:CustomDialogController = new CustomDialogController({
+    builder:UserDialog({
+      confirm:()=> this.onConfirm(),
+      cancel:() => this.exitApp()
+    })
 
+  })
+ async aboutToAppear(){
+    // 1.加载首先项
+    let isAgree = await preferenceUtil.getPreferenceValue(PREF_KEY,false)
+    // 2.判断是否同意
+   if(isAgree) {
+   //   同意跳转到首页
+    this.jumpToIndex()
+   } else {
+   //   不同意，弹窗
+     this.controller.open()
+   }
+  }
+
+  jumpToIndex(){
+    setTimeout(()=>{
+      router.replaceUrl({
+        url:'pages/Index'
+      })
+    },1000)
+
+  }
+  onConfirm(){
+    preferenceUtil.putPreferenceValue(PREF_KEY,true)
+    this.jumpToIndex()
+  }
+  exitApp(){
+    this.context.terminateSelf()
+  }
   build() {
       Column({space:10}) {
         Row(){
