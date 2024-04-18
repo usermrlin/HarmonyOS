@@ -2,6 +2,8 @@ import { CommonConstants } from '../../common/constants/CommonConstants'
 
 @Component
 export default struct ItemLIst {
+  showPanel: () => void
+
   build() {
     Tabs() {
       TabContent() {
@@ -42,6 +44,7 @@ export default struct ItemLIst {
           .width('100%')
           .padding(CommonConstants.SPACE_6)
         }
+        .onClick(() => this.showPanel())
       })
     }
     .width('100%')

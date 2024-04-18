@@ -1,11 +1,18 @@
 import { CommonConstants } from '../common/constants/CommonConstants'
 import router from '@ohos.router'
 import ItemList from '../view/Item/ItemList'
+import ItemPanelHeader from '../view/Item/ItemPanelHeader'
+import ItemCard from '../view/Item/ItemCard'
 
 @Entry
 @Component
 struct ItemIndex {
-  @State message: string = 'Hello World'
+  @State amount: number = 1
+  @State showPanel: boolean = false
+
+  onPanleShow() {
+    this.showPanel = true
+  }
 
   build() {
 
@@ -13,7 +20,21 @@ struct ItemIndex {
       //   头部导航
       this.Header()
       //   列表
-      ItemList()
+      ItemList({ showPanel: this.onPanleShow.bind(this) })
+        .layoutWeight(1)
+      //   底部面板
+      Panel(this.showPanel) {
+        //   顶部日期
+        ItemPanelHeader()
+        //   记录项卡片
+        ItemCard({ amount: this.amount })
+        //   数字键盘
+        //   按钮
+      }
+      .mode(PanelMode.Full)
+      .dragBar(false)
+      .backgroundMask($r('app.color.light_gray'))
+      .backgroundColor(Color.White)
     }
     .width('100%')
     .height('100%')
