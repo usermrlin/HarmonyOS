@@ -1,12 +1,24 @@
 import UIAbility from '@ohos.app.ability.UIAbility';
 import hilog from '@ohos.hilog';
 import window from '@ohos.window';
+import { CommonConstants } from '../common/constants/CommonConstants';
+import dateUtil from '../common/utils/DateUtil';
 import preferenceUtil from '../common/utils/PreferenceUtil';
+import DbUtil from '../common/utils/DbUtil'
+import RecordModel from '../model/RecordModel';
 
 export default class EntryAbility extends UIAbility {
-  onCreate(want, launchParam) {
+  async onCreate(want, launchParam) {
     // 加载用户首选项
     preferenceUtil.loadPreference(this.context)
+
+    // 初始化日期
+    AppStorage.SetOrCreate(CommonConstants.RECORD_DATE, dateUtil.beginTimeOfDay(new Date()))
+    //  初始化RDB工具
+    await DbUtil.initDB(this.context)
+    //   创建record表
+    DbUtil.createTable(RecordModel.getCreateTableSql())
+
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
   }
 
