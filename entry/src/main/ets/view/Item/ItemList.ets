@@ -23,12 +23,13 @@ export default struct ItemLIst {
       }
       .tabBar('全部')
 
-      ForEach(ItemModel.listItemGroupByCategory(this.isFood), (group: GroupInfo) => {
-        TabContent() {
-          this.TabContentBuilder(group.items)
-        }
-        .tabBar(group.type.name)
-      })
+      ForEach(ItemModel.listItemGroupByCategory(this.isFood),
+        (group: GroupInfo<ItemCategory, RecordItem>) => {
+          TabContent() {
+            this.TabContentBuilder(group.items)
+          }
+          .tabBar(group.type.name)
+        })
 
     }
     .width(CommonConstants.THOUSANDTH_940)
