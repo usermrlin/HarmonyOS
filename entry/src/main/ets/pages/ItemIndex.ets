@@ -4,6 +4,7 @@ import ItemList from '../view/Item/ItemList'
 import ItemPanelHeader from '../view/Item/ItemPanelHeader'
 import ItemCard from '../view/Item/ItemCard'
 import NumberKeyboard from '../view/Item/NumberKeyboard'
+import RecordItem from '../viewmodel/RecordItem'
 
 @Entry
 @Component
@@ -11,10 +12,12 @@ struct ItemIndex {
   @State amount: number = 1
   @State value: string = ''
   @State showPanel: boolean = false
+  @State item: RecordItem = null
 
-  onPanleShow() {
+  onPanleShow(item: RecordItem) {
     this.amount = 1
     this.value = ''
+    this.item = item
     this.showPanel = true
   }
 
@@ -31,7 +34,10 @@ struct ItemIndex {
         //   顶部日期
         ItemPanelHeader()
         //   记录项卡片
-        ItemCard({ amount: this.amount })
+        if (this.item) {
+          ItemCard({ amount: this.amount, item: $item })
+        }
+
         //   数字键盘
         NumberKeyboard({ amount: $amount, value: $value })
         //   按钮
