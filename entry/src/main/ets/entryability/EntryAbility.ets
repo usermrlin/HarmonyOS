@@ -2,21 +2,20 @@ import UIAbility from '@ohos.app.ability.UIAbility';
 import hilog from '@ohos.hilog';
 import window from '@ohos.window';
 import { CommonConstants } from '../common/constants/CommonConstants';
-import dateUtil from '../common/utils/DateUtil';
-import preferenceUtil from '../common/utils/PreferenceUtil';
-import DbUtil from '../common/utils/DbUtil'
+import DateUtil from '../common/utils/DateUtil';
+import DbUtil from '../common/utils/DbUtil';
+import PreferenceUtil from '../common/utils/PreferenceUtil';
 import RecordModel from '../model/RecordModel';
 
 export default class EntryAbility extends UIAbility {
   async onCreate(want, launchParam) {
-    // 加载用户首选项
-    preferenceUtil.loadPreference(this.context)
-
-    // 初始化日期
-    AppStorage.SetOrCreate(CommonConstants.RECORD_DATE, dateUtil.beginTimeOfDay(new Date()))
-    //  初始化RDB工具
+    // 1.加载用户首选项
+    PreferenceUtil.loadPreference(this.context)
+    // 2.初始化日期
+    AppStorage.SetOrCreate(CommonConstants.RECORD_DATE, DateUtil.beginTimeOfDay(new Date()))
+    // 3.初始化RDB工具
     await DbUtil.initDB(this.context)
-    //   创建record表
+    // 4.创建record表
     DbUtil.createTable(RecordModel.getCreateTableSql())
 
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
@@ -30,7 +29,7 @@ export default class EntryAbility extends UIAbility {
     // Main window is created, set main page for this ability
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
 
-    windowStage.loadContent('pages/welcomePage', (err, data) => {
+    windowStage.loadContent('pages/WelcomePage', (err, data) => {
       if (err.code) {
         hilog.error(0x0000, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
         return;

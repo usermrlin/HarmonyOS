@@ -5,6 +5,9 @@ import ItemPanelHeader from '../view/Item/ItemPanelHeader'
 import ItemCard from '../view/Item/ItemCard'
 import NumberKeyboard from '../view/Item/NumberKeyboard'
 import RecordItem from '../viewmodel/RecordItem'
+import RecordType from '../viewmodel/RecordType'
+import { RecordTypeEnum, RecordTypes } from '../model/RecordTypeModel'
+import RecordService from '../service/RecodService'
 
 @Entry
 @Component
@@ -13,6 +16,8 @@ struct ItemIndex {
   @State value: string = ''
   @State showPanel: boolean = false
   @State item: RecordItem = null
+  @State type: RecordType = RecordTypes[0]
+  @State isFood: boolean = true
 
   onPanleShow(item: RecordItem) {
     this.amount = 1
@@ -21,13 +26,21 @@ struct ItemIndex {
     this.showPanel = true
   }
 
+  onPageShow() {
+    //   获取跳转参数
+    let params: any = router.getParams()
+    //   获取点击的饮食记录类型
+    this.type = params.type
+    this.isFood = this.type.id !== RecordTypeEnum.WORKOUT
+  }
+
   build() {
 
     Column() {
       //   头部导航
       this.Header()
       //   列表
-      ItemList({ showPanel: this.onPanleShow.bind(this) })
+      ItemList({ showPanel: this.onPanleShow.bind(this), isFood: this.isFood })
         .layoutWeight(1)
       //   底部面板
       Panel(this.showPanel) {
@@ -53,7 +66,14 @@ struct ItemIndex {
             .backgroundColor($r('app.color.primary_color'))
             .type(ButtonType.Normal)
             .borderRadius(6)
-            .onClick(() => this.showPanel = false)
+            .onClick(() => {
+              // 持久化存储
+              RecordService.insert(this.type.id, this.item.id, this.amount)
+                .then(() => {
+                  // 关闭弹窗
+                  this.showPanel = false
+                })
+            })
         }
         .margin({ top: 10 })
       }
@@ -72,7 +92,7 @@ struct ItemIndex {
         .width(24)
         .onClick(() => router.back())
       Blank()
-      Text('早餐').fontSize(18).fontWeight(CommonConstants.FONT_WEIGHT_600)
+      Text(this.type.name).fontSize(18).fontWeight(CommonConstants.FONT_WEIGHT_600)
     }
     .width((CommonConstants.THOUSANDTH_940))
     .height(32)

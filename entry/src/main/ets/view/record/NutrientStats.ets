@@ -2,8 +2,8 @@ import { CommonConstants } from '../../common/constants/CommonConstants'
 
 @Component
 export default struct NutrientStats {
-  carbon: number = 23
-  protein: number = 9
+  @Prop carbon: number
+  @Prop protein: number
   fat: number = 7
   recommendCarbon: number = CommonConstants.RECOMMEND_CARBON
   recommendProtin: number = CommonConstants.RECOMMEND_PROTEIN

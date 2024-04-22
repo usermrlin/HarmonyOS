@@ -2,7 +2,7 @@ export default class RecordPO {
   /**
    * 记录id
    */
-  id: number
+  id?: number
   /**
    * 饮食记录类型
    */
@@ -17,7 +17,7 @@ export default class RecordPO {
    */
   amount: number
   /**
-   * 记录日期
+   * 记录的日期
    */
   createTime: number
 }

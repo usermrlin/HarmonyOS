@@ -1,9 +1,16 @@
-import ItemCategory from './ItemCategory'
-import RecordItem from './RecordItem'
-
 export default class GroupInfo<TYPE, ELEMENT> {
+  /**
+   * 分组类型
+   */
   type: TYPE
+  /**
+   * 组内数据集合
+   */
   items: ELEMENT[]
+
+  /**
+   * 组内记录的总热量
+   */
   calorie: number = 0
 
   constructor(type: TYPE, items: ELEMENT[]) {

@@ -15,4 +15,3 @@ export default class BreakpointType<T> {
     return this.options[breakpoint]
   }
 }
-

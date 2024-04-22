@@ -7,7 +7,7 @@ import RecordItem from '../../viewmodel/RecordItem'
 @Component
 export default struct ItemLIst {
   showPanel: (item: RecordItem) => void
-  @State isFood: boolean = true
+  @Prop isFood: boolean
   data = [
     new GroupInfo(new ItemCategory(0, '主食'), []),
     new GroupInfo(new ItemCategory(1, '果蔬'), []),

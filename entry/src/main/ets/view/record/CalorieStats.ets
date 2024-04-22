@@ -2,8 +2,8 @@ import { CommonConstants } from '../../common/constants/CommonConstants'
 
 @Component
 export default struct CalorieStats {
-  intake: number = 192
-  expend: number = 150
+  @Prop intake: number
+  @Prop expend: number
   recommend: number = CommonConstants.RECOMMEND_CALORIE
 
   remianCalorie() {
